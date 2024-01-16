@@ -26,4 +26,20 @@ describe("Drivers controller", () => {
         });
     });
   });
+  it("PUT to /api/drivers/:id updates a driver", done => {
+    Driver.create({ email: "test@test.com", driving: false }).then(driver => {
+      request(app)
+        .put(`/api/drivers/${driver._id}`)
+        .send({ email: "test@test.com", driving: true })
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .end((err, res) => {
+          if (err) return done(err);
+          Driver.findById(driver._id).then(driver => {
+            assert.equal(driver.driving, true);
+            done();
+          });
+        });
+    });
+  });
 });
