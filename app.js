@@ -4,7 +4,9 @@ const mongoose = require("mongoose");
 const routes = require("./routes/routes");
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://127.0.0.1:27017/muber");
+if (process.env.NODE_ENV !== "test") {
+  mongoose.connect("mongodb://127.0.0.1:27017/muber");
+}
 
 const app = express();
 
