@@ -9,6 +9,15 @@ const mongoose = require("mongoose");
 const app = require("../../app");
 const Driver = mongoose.model("driver");
 
+/**
+ * Tests for the drivers controller API.
+ *
+ * Includes tests for:
+ *
+ * - Creating a new driver via POST
+ * - Updating a driver via PUT
+ * - Deleting a driver via DELETE
+ */
 describe("Drivers controller", () => {
   it("creates a new driver", done => {
     Driver.countDocuments({}).then(count => {
@@ -37,6 +46,21 @@ describe("Drivers controller", () => {
           if (err) return done(err);
           Driver.findById(driver._id).then(driver => {
             assert.equal(driver.driving, true);
+            done();
+          });
+        });
+    });
+  });
+  it("DELETE to /api/drivers/:id deletes a driver", done => {
+    Driver.create({ email: "test@test.com", driving: false }).then(driver => {
+      request(app)
+        .delete(`/api/drivers/${driver._id}`)
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .end((err, res) => {
+          if (err) return done(err);
+          Driver.findById(driver._id).then(driver => {
+            assert.equal(driver, null);
             done();
           });
         });

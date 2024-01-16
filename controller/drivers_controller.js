@@ -1,3 +1,7 @@
+/**
+ * Driver controller module.
+ * Exports CRUD handlers for Driver model.
+ */
 const Driver = require("../models/driver");
 module.exports = {
   greeting(req, res) {
@@ -17,6 +21,14 @@ module.exports = {
       .then(() => Driver.findById(driverId))
       .then(driver => {
         res.send(driver);
+      })
+      .catch(next);
+  },
+  delete(req, res, next) {
+    const driverId = req.params.id;
+    Driver.findByIdAndDelete(driverId)
+      .then(() => {
+        res.send({ message: "Driver deleted" });
       })
       .catch(next);
   },
