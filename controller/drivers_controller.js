@@ -3,14 +3,11 @@ module.exports = {
   greeting(req, res) {
     res.send({ hi: "there" });
   },
-  create(req, res) {
-    console.log(req.body);
+  create(req, res, next) {
     Driver.create(req.body)
       .then(driver => {
         res.send(driver);
       })
-      .catch(err => {
-        res.status(400).send(err);
-      });
+      .catch(next);
   },
 };
